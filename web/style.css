@@ -1,0 +1,175 @@
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0 auto;
+  max-width: 64rem;
+  padding: 1.5rem;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 1.4rem;
+}
+
+.lead {
+  color: #444;
+}
+
+.lead.small {
+  font-size: 0.9rem;
+}
+
+.panel {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.field {
+  margin-top: 0.75rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+  box-sizing: border-box;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.4rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+button {
+  cursor: pointer;
+  padding: 0.6rem 1rem;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+button.toggle {
+  background: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button.toggle.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.status {
+  margin-top: 0.75rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.status.error {
+  color: #b00020;
+}
+
+.output {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  min-height: 3rem;
+  white-space: pre-wrap;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+.timing {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.editor-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18rem;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (max-width: 45rem) {
+  .editor-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+#editorCanvas {
+  width: 100%;
+  max-width: 32rem;
+  aspect-ratio: 1 / 1;
+  border: 1px dashed #999;
+  border-radius: 4px;
+  background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 50% / 20px 20px;
+  touch-action: none;
+  cursor: grab;
+}
+
+#editorCanvas:active {
+  cursor: grabbing;
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.checklist li::before {
+  content: "○ ";
+}
+
+.checklist li.ok {
+  color: #16803c;
+}
+
+.checklist li.ok::before {
+  content: "✓ ";
+}
+
+.checklist li.fail {
+  color: #b00020;
+}
+
+.checklist li.fail::before {
+  content: "✗ ";
+}
+
+.download-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+}
+
+.rules-ref {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.rules-ref ul {
+  margin-top: 0.5rem;
+}

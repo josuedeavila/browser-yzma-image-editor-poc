@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Editor de imagens para o Mercado Livre (yzma/WASM)</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Editor de imagens para anúncios do Mercado Livre — local, no browser</h1>
+    <p class="lead">
+      Ajusta uma foto de produto pras regras de imagem do Mercado Livre — tudo no
+      navegador, sem enviar a imagem pra lugar nenhum. O editor (recorte/enquadramento/
+      resolução) é Canvas2D puro; a checagem visual é opcional e usa um modelo de
+      visão rodando via <a href="https://github.com/hybridgroup/yzma" target="_blank" rel="noopener">yzma</a>
+      (<code>llama.cpp</code> como WebAssembly). Ver <code>web/rules.js</code> pelas
+      regras e fontes, e a seção "Performance sem GPU" do README.
+    </p>
+
+    <section class="panel">
+      <h2>1. Imagem</h2>
+      <div class="field">
+        <label for="file">Escolha uma foto de produto</label>
+        <input id="file" type="file" accept="image/*" />
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>2. Editor</h2>
+      <div class="editor-layout">
+        <canvas id="editorCanvas" width="1200" height="1200"></canvas>
+        <div class="editor-controls">
+          <div class="field">
+            <label>Enquadramento</label>
+            <div class="actions">
+              <button id="modePad" class="toggle active" type="button">Preencher com branco (não corta)</button>
+              <button id="modeCrop" class="toggle" type="button">Cortar pra preencher</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="zoom">Zoom (arraste a imagem pra reposicionar)</label>
+            <input id="zoom" type="range" min="0.2" max="4" step="0.05" value="1" />
+          </div>
+          <div class="field">
+            <label for="targetSide">Resolução de exportação (px, 500–1920)</label>
+            <input id="targetSide" type="number" min="500" max="1920" step="10" value="1200" />
+          </div>
+          <div class="field">
+            <label for="format">Formato de exportação</label>
+            <select id="format">
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/png">PNG</option>
+            </select>
+          </div>
+          <div class="field" id="qualityField">
+            <label for="quality">Qualidade JPEG</label>
+            <input id="quality" type="range" min="0.5" max="1" step="0.05" value="0.9" />
+          </div>
+          <div class="actions">
+            <button id="exportBtn" type="button">Exportar</button>
+          </div>
+          <ul id="techChecklist" class="checklist"></ul>
+          <a id="downloadLink" class="download-link" style="display: none" download="anuncio.jpg">Baixar imagem exportada</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>3. Checagem visual por IA (opcional)</h2>
+      <p class="lead small">
+        Um modelo pequeno (256M parâmetros) aponta problemas prováveis de fundo,
+        marca d'água/texto e enquadramento — é um <strong>palpite, não uma checagem
+        oficial</strong>. Só o checklist técnico acima tem garantia. A análise da
+        imagem pelo modelo pode levar de dezenas de segundos a alguns minutos sem
+        GPU — ver README "Performance sem GPU".
+      </p>
+      <div class="field">
+        <label for="modelUrl">Modelo (GGUF)</label>
+        <input
+          id="modelUrl"
+          value="https://huggingface.co/ggml-org/SmolVLM-256M-Instruct-GGUF/resolve/main/SmolVLM-256M-Instruct-Q8_0.gguf"
+        />
+      </div>
+      <div class="field">
+        <label for="projectorUrl">Projetor / mmproj (GGUF)</label>
+        <input
+          id="projectorUrl"
+          value="https://huggingface.co/ggml-org/SmolVLM-256M-Instruct-GGUF/resolve/main/mmproj-SmolVLM-256M-Instruct-Q8_0.gguf"
+        />
+      </div>
+      <div class="actions">
+        <button id="loadModelBtn" type="button">Carregar modelo de visão</button>
+        <button id="checkBtn" type="button" disabled>Verificar imagem com IA</button>
+      </div>
+      <div id="modelStatus" class="status">modelo não carregado</div>
+      <div id="aiOutput" class="output"></div>
+      <div id="aiTiming" class="timing"></div>
+
+      <details class="rules-ref">
+        <summary>Regras de composição usadas como referência (não checadas automaticamente pelo editor)</summary>
+        <ul id="compositionRules"></ul>
+      </details>
+    </section>
+
+    <script src="rules.js"></script>
+    <script src="editor.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
